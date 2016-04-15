@@ -8,14 +8,15 @@ block content
 
 	.lakesRun
 		for lake in lakes
-			p Name: #{lake.name}
+			h3 Name: #{lake.name}
 			p Distance: #{lake.miles} miles
 			p Dates Run:
 				ul
 					for run in lake.runs
 						li #{run.dateRun}
-						li Runtime: #{run.time} minutes
-						li Weather Conditions: #{run.weather}
+							ul
+								li Runtime: #{run.time} minutes
+								li Weather Conditions: #{run.weather}
 						br
 			form(action="/addRun", method="POST")
 				label Add new run date
