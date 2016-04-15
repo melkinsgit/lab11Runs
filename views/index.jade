@@ -1,0 +1,70 @@
+extends layout
+
+block content
+	h1 Lakes Data
+	
+	
+	h2 Lakes Run with Times, Weather and Date
+	
+	.lakesRun
+		for lake in lakes
+			p Name: #{lake.name}
+			p Distance: #{lake.miles}
+			
+		hr
+			
+			p Dates Run:
+				ul
+					for run in lake.runs
+						li Date Run: #{run.dateRun}
+						li Runtime: #{run.time}
+						li Weather Conditions: #{run.weather}
+						br
+			form(action="/addRun", method="POST")
+
+				label Add new run date
+					input(name="dateRun" type="date" required)
+				input(name="name" value="#{lake.name}" hidden)
+				input(name="addRunDate" type="submit" value="Add new run")
+
+		hr
+
+	h2 Add Lake
+		
+	.addNewLake
+
+		if error
+			p(style="font-weight: bold") #{error}
+
+		form(submit='/', method='post')
+			label Name (required)
+				input(name="name" type="text" required)
+			br
+			label How many miles is this lake run?
+				input(name="miles" type="number")
+			br
+			label Average Eggs
+				input(name="averageEggsLaid" type="number", min="0")
+			br
+			label Threatened?
+				input(name="threatened" type="checkbox")
+			br
+			label Date run (required)
+				input(name="dateRun" type="date")
+				input(name="time" type="number")
+				input(name="weather" type="text")
+			br
+			input(type="submit" name="addLake" value="Add new Lake")
+			
+	hr
+		
+	h2 Add a New Runtime
+
+	div.add_runTime
+	
+		each lake in lakes
+			form(action='/addRunTime' method='post')
+				p Name: #{lake.name}
+				input(name="name" value="#{lake.name}" hidden)
+				input.button(type="submit" value="Add Runtime")
+		
