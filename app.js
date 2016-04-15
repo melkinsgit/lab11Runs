@@ -13,7 +13,7 @@ var flash = require('connect-flash');
 var routes = require('./routes/index');
 var users = require('./routes/users');
 
-// will create connection to the database birdrecords and creates it
+// will create connection to the database lakeruns and creates it
 var db = mongoose.connect('mongodb://localhost:27017/lakeruns');
 
 var app = express();

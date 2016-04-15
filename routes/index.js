@@ -8,7 +8,7 @@ router.get('/', function(req, res, next) {
   
   Lake.find(function(err, lakeDocs){
 	if (err) { return next(err); }
-	return res.render('index', { lakes: lakeDocs, error: req.flash('error') });  // returns an array of JSON ojbects type Lake called lakes; index.jade deals with lakes
+		return res.render('index', { lakes: lakeDocs, error: req.flash('error') });  // returns an array of JSON ojbects type Lake called lakes; index.jade deals with lakes
   });
 });
 
@@ -21,12 +21,16 @@ router.post('/', function(req, res, next) {
 		}
 	}
 	
-	var date = req.body.dateRun || Date.now();
+	var runToSave = {date: req.body.dateRun || Date.now(),
+		time: req.body.time,
+		weather: req.body.weather}
+	
 	
 	req.body.runs = [];
-	req.body.runs.push(date);
+	req.body.runs.push(runToSave);
 	
 	var newLake = Lake(req.body);  // JSON object of the user input data; calling Lake constructor
+	console.log(newLake);
 	
 	newLake.save(function (err, savedLake) {
 		if (err) { 
@@ -41,15 +45,17 @@ router.post('/', function(req, res, next) {
 			return next(err) ;
 		}
 		res.status (201);
+		console.log("should have saved lake: ")
+		console.log(savedLake);
 		return res.redirect('/');
-	} );
+	} );  // end save new lake
 
 } );
 
 
 /* New POST */
 
-router.post('/addRunTime', function(req, res, next) {
+router.post('/addRun', function(req, res, next) {
 	
 	var newRun = req.body.dateRun;
 	if (!newRun || newRun == ""){
@@ -59,6 +65,8 @@ router.post('/addRunTime', function(req, res, next) {
 	// lake will be a db object that is a match for the lake name the user chose
 	Lake.findOne ( { name: req.body.name }, function (err, lake) {
 		
+
+		
 		if (err) {
 				return next(err);
 			}
@@ -66,8 +74,12 @@ router.post('/addRunTime', function(req, res, next) {
 		if (!lake) {
 			return next (new Error('No lake found with name ' + req.body.name) );
 		}
-		
-		lake.datesSeen.push(newSighting);
+		console.log(req.body);
+		var newRunTimeInfo = {date:req.body.date,
+			time: req.body.time,
+			weather: req.body.weather}
+			
+		lake.runs.push(newRunTimeInfo);
 		
 		lake.save(function(err){
 			if (err) {
@@ -116,15 +128,15 @@ router.post('/addRunTime', function(req, res, next) {
 			// return next (new Error('No bird found with name ' + req.body.name) );
 		// }
 		// if there is no error and there is a bird by the name of the req data sent, then render the update form/page with the data for that bird - the object of which was returned from the findOne search
-		console.log("the bird we want to update is:")
-		console.log(birdToUpdate);		
+		// console.log("the bird we want to update is:")
+		// console.log(birdToUpdate);		
 		// where the jade file refers to bird, the values from birdToUpdate will be used
 		// res.render('update', {bird: birdToUpdate});  // jade: code
 	// });
 // });
 
 /* Submit Updated bird */ 
-router.post('/submitUpdate', function(req, res, next){
+// router.post('/submitUpdate', function(req, res, next){
 	
 	// take the data from the form as updated by the user and set it into vars that will be used for the update method
 	// var updateInfo = {name:req.body.name[0],

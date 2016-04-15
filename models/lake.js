@@ -19,19 +19,13 @@ var lakeSchema = new Schema ({
 		lowercase: true},
 	miles : Number,
 	runs : [{
-		dateRun: {Date,
+		dateRun: {type: Date,
 			default: Date.now()},
 		time: {type: Number,
 			min: 0,
-			required: true}
+			required: true},
 		weather: String
 		}]
-	// averageEggsLaid : { type: Number,  // integers and floats
-		// min: 1,
-		// max: 50},
-	// threatened: { type: Boolean, default: false},
-	// add nest data
-	// datesSeen : [{type : Date, default: Date.now()}]    // just adding [] gives you an array
 });
 
 // mongoose.model turns it into a Run object - uppercase first letter
