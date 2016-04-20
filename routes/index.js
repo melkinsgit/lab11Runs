@@ -30,7 +30,7 @@ router.post('/', function(req, res, next) {
 	req.body.runs.push(runToSave);
 	
 	var newLake = Lake(req.body);  // JSON object of the user input data; calling Lake constructor
-	console.log(newLake);
+	// console.log(newLake);
 	
 	newLake.save(function (err, savedLake) {
 		if (err) { 
@@ -45,8 +45,8 @@ router.post('/', function(req, res, next) {
 			return next(err) ;
 		}
 		res.status (201);
-		console.log("should have saved lake: ")
-		console.log(savedLake);
+		// console.log("should have saved lake: ")
+		// console.log(savedLake);
 		return res.redirect('/');
 	} );  // end save new lake
 
@@ -58,6 +58,7 @@ router.post('/', function(req, res, next) {
 router.post('/addRun', function(req, res, next) {
 	
 	var newRun = req.body.dateRun;
+	console.log(newRun + " is the date run");
 	if (!newRun || newRun == ""){
 		return res.redirect('/');
 	}
@@ -72,11 +73,12 @@ router.post('/addRun', function(req, res, next) {
 		if (!lake) {
 			return next (new Error('No lake found with name ' + req.body.name) );
 		}
-		console.log(req.body);
-		var newRunTimeInfo = {date:req.body.date,
+		console.log(req.body.dateRun);
+		var newRunTimeInfo = {dateRun:req.body.dateRun,
 			time: req.body.time,
 			weather: req.body.weather}
-			
+		console.log("the date to be save ");
+		console.log(newRunTimeInfo);
 		lake.runs.push(newRunTimeInfo);
 		
 		lake.save(function(err){

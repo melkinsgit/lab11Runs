@@ -12,10 +12,16 @@ block content
 			p Distance: #{lake.miles} miles
 			p Dates Run:
 				ul
+					-var fastRun = lake.runs[0].time
 					for run in lake.runs
-						li #{run.dateRun}
+						-if (run.time<fastRun) fastRun=run.time
+					for run in lake.runs
+						li #{run.dateRun.toLocaleDateString()}
 							ul
-								li Runtime: #{run.time} minutes
+								-if (run.time===fastRun)
+									li.fastest Runtime: #{run.time} minutes - your fastest time on Lake #{lake.name}
+								-else
+									li Runtime: #{run.time} minutes
 								li Weather Conditions: #{run.weather}
 						br
 			form(action="/addRun", method="POST")
